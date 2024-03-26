@@ -27,7 +27,7 @@ jobs:
         # But first we read the WEBHOOK secret and create an
         # environment variable with the same name.
         env:
-          DB_PARAMS: ${{ secrets.WEBHOOK }}
+          DB_PARAMS: ${{ secrets.DB_PARAMS }}
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: |
           pip install -r requirements.txt
