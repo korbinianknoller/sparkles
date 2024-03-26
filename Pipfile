@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+start = "python bot.py"
+
+
+[packages]
+aiogram = "*"
+captcha = "*"
+mongoengine = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
