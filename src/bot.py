@@ -3,6 +3,7 @@ import logging
 import sys
 import datetime
 from os import getenv
+from io import BytesIO
 import random
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.enums import ParseMode
@@ -11,6 +12,7 @@ from enum import Enum
 from aiogram.types import (
     Message, 
     FSInputFile,
+    BufferedInputFile,
     InlineKeyboardMarkup,
     InlineKeyboardButton,
     CallbackQuery
@@ -46,6 +48,16 @@ dp = Dispatcher()
 def generate_captcha():
     return random.randint(100000, 999999)
 
+def write_bytesio_to_file(filename: str, bytesio: BytesIO):
+    """
+    Write the contents of the given BytesIO to a file.
+    Creates the file or overwrites the file if it does
+    not exist yet. 
+    """
+    with open(filename, "wb") as outfile:
+        # Copy the BytesIO stream to the output file
+        outfile.write(bytesio.getbuffer().tobytes())
+
 # Store CAPTCHA data (chat_id, captcha_string) in a dictionary
 
 def check_verification(id: int) -> UserType:
@@ -68,11 +80,13 @@ async def command_start_handler(message: Message) -> None:
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
 
     try:
+        print("get fonts")
         custom_fonts = ['fonts/alex.ttf', 'fonts/bodon.ttf']
+        print("fonts gotten")
         captcha = ImageCaptcha(fonts=custom_fonts, width=360, height=160)
         # Generate a CAPTCHA
         data = generate_captcha()
-
+        print(data)
         capt = db.Captcha.objects(user_id=message.chat.id)
         if len(capt) < 1:
             capt = db.Captcha(user_id=message.chat.id, data=data, created_at=datetime.datetime.now())
@@ -81,13 +95,17 @@ async def command_start_handler(message: Message) -> None:
             capt.update(data=data)
 
         data = str(data)
+        print("write image to container")
+        captcha_image = captcha.generate(data)
+        # captcha.write(data, 'out.png')
 
-        # captcha_image = captcha.generate(data)
-        captcha.write(data, 'out.png')
-
+        # write_bytesio_to_file("out.png", captcha_image)
+        print("image written")
         # print(captcha_image)
 
-        image_file = FSInputFile('out.png')
+        image_file = BufferedInputFile(captcha_image.getbuffer().tobytes(), "out.png")
+
+        print("image gotten")
         
         await message.answer_photo(photo=image_file, caption="Prove You're Human (Type in chat below 👇)")
     except Exception as e:
