@@ -24,15 +24,14 @@ ARG UID=10001
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
-COPY requirements.txt ./
+COPY . .
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    python -m pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt
 
 # Switch to the non-privileged user to run the application.
 
 # Copy the source code into the container.
-COPY . .
+
 
 # Expose the port that the application listens on.
 
