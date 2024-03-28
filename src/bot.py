@@ -410,7 +410,7 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
 
-def run(server_class=HTTPServer, handler_class=S, addr="localhost", port=8000):
+def run(server_class=HTTPServer, handler_class=S, addr="localhost", port=8089):
     server_address = (addr, port)
     httpd = server_class(server_address, handler_class)
 
@@ -431,7 +431,7 @@ if __name__ == "__main__":
         "-p",
         "--port",
         type=int,
-        default=8000,
+        default=8089,
         help="Specify the port on which the server listens",
     )
     args = parser.parse_args()
