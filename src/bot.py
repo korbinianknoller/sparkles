@@ -24,6 +24,7 @@ import db
 import layouts
 from callback_actions import CustomCallBacksActions
 import bot_helpers
+import socket
 
 class UserType(Enum):
     NO_USER = 1
@@ -404,3 +405,6 @@ async def main() -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
+    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serversocket.bind(('localhost', 8089))
+    serversocket.listen(5)
