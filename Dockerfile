@@ -38,5 +38,7 @@ RUN python -m pip install -r requirements.txt
 
 WORKDIR /app/src
 
+EXPOSE 8089
+
 # Run the application.
 CMD python bot.py
