@@ -1,34 +1,35 @@
-# name: sparks-bot
+name: sparks-bot
 
-# on:
-#   push:
-#     branches:
-#       - "main"
-#   schedule:
-#     - cron: "0 */5 * * *"
+on:
+  push:
+    branches:
+      - "main"
+  schedule:
+    - cron: "0 */5 * * *"
 
-# jobs:
-#   test_schedule:
-#     runs-on: ubuntu-latest
+jobs:
+  test_schedule:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       # actions checkout and python are pre-built actions
-#       # that abstract commonly used tasks.
-#       - uses: actions/checkout@v4
+    steps:
+      # actions checkout and python are pre-built actions
+      # that abstract commonly used tasks.
+      - uses: actions/checkout@v4
 
-#       # The python action will set us a Python 3.8 (64-bit) instance.
-#       - name: Setting up Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: "3.12"
+      # The python action will set us a Python 3.8 (64-bit) instance.
+      - name: Setting up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-#       # Use PIP to install the dependencies and then run the script.
-#       - name: Running Script
-#         # But first we read the WEBHOOK secret and create an
-#         # environment variable with the same name.
-#         env:
-#           DB_PARAMS: ${{ secrets.DB_PARAMS }}
-#           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-#         run: |
-#           pip install -r requirements.txt
-#           python ./src/bot.py
+      # Use PIP to install the dependencies and then run the script.
+      - name: Running Script
+        # But first we read the WEBHOOK secret and create an
+        # environment variable with the same name.
+        env:
+          DB_PARAMS: ${{ secrets.DB_PARAMS }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          pip install -r requirements.txt
+          cd src
+          python bot.py
