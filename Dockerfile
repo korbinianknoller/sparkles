@@ -35,7 +35,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY . .
 
 # Expose the port that the application listens on.
-EXPOSE 8043
 
 
 WORKDIR /app/src
