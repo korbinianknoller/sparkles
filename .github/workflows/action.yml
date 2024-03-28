@@ -5,10 +5,10 @@ on:
     branches:
       - "main"
   schedule:
-    - cron: "0 */5 * * *"
+    - cron: "0 */6 * * *"
 
 jobs:
-  test_schedule:
+  sparkles:
     runs-on: ubuntu-latest
 
     steps:
