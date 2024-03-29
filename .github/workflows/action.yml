@@ -7,6 +7,10 @@ on:
   schedule:
     - cron: "0 */6 * * *"
 
+concurrency:
+  group: sparks-bot
+  cancel-in-progress: true
+
 jobs:
   sparkles:
     runs-on: ubuntu-latest
