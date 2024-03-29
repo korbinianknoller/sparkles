@@ -13,7 +13,7 @@ jobs:
 
     steps:
       # actions checkout and python are pre-built actions
-      # that abstract commonly used tasks.
+      #  that abstract commonly used tasks.
       - uses: actions/checkout@v4
 
       # The python action will set us a Python 3.8 (64-bit) instance.
