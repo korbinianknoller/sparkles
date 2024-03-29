@@ -52,7 +52,7 @@ def sparkz_balance(**kwargs):
 Here is your $SPARKZ Token Balance.
 
 💰 Airdrop Balance: {kwargs["token_balance"]}
-💰 Presale Balance: {kwargs["presale_balance"]} $PEPESORA
+💰 Presale Balance: {kwargs["presale_balance"]} $SPARKZ
 💰 Mission Balance: {kwargs["mission_balance"]} 
 
 🔗 Linked Wallet : 

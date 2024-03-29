@@ -73,15 +73,11 @@ async def handle_ref(message: Message, bot: Bot, ref: str):
             await message.answer("⚠️ Cannot use own referral link ⚠️")
             return
         
-        if ref_owner[0].ref_used is True:
-            await message.answer("⚠️ Referal Code already used ⚠️")
-            return
-        
         if user[0].ref_self is True:
-            await message.answer("⚠️ Cannot supply referral code more than once ⚠️")
+            await message.answer("⚠️ Cannot use referral code more than once ⚠️")
             return
         
-        ref_owner.update(ref_used=True, token_balance=ref_owner[0].token_balance + 75)
+        ref_owner.update(ref_count=ref_owner[0].ref_count + 1, token_balance=ref_owner[0].token_balance + 75)
         user.update(ref_self=True)
 
         await message.answer("Referral Linking Sucessful 🎯")

@@ -21,7 +21,7 @@ class User(Document):
     token_balance = FloatField()
     referral = StringField()
     ref_self= BooleanField(default=False)
-    ref_used=BooleanField(default=False)
+    ref_count=IntField()
     verify_twitter_task = BooleanField(default=False)
     created_at = DateTimeField()
     updated_at = DateTimeField(default=datetime.datetime.now())
