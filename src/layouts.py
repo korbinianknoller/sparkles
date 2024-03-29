@@ -57,7 +57,7 @@ Here is your $SPARKZ Token Balance.
 💰 Presale Balance: {kwargs["presale_balance"]} $PEPESORA
 💰 Mission Balance: {kwargs["mission_balance"]} 
 
-🔗 Linked Wallet : 
+🔗 Linked Wallet: 
 
 <i>{kwargs["address"]}</i>
 
