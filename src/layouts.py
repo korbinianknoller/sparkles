@@ -1,16 +1,14 @@
 
 def welcome_message(name: str):
     return f"""
-Welcome to $Sparkz Bot {name}
-
-Please follow the instructions below:
+Welcome to $Sparkz Bot {name} 🎉🎉🎉
 """
 
 def address_verified(address: str):
     return f"""
 🔗✅ Successfully Linked SOL Wallet:
 
-Use '/referral' to use referral link
+Use '/referral' to get referral link
 
 <i>{address}</i>
 """
@@ -57,7 +55,7 @@ Here is your $SPARKZ Token Balance.
 💰 Presale Balance: {kwargs["presale_balance"]} $PEPESORA
 💰 Mission Balance: {kwargs["mission_balance"]} 
 
-🔗 Linked Wallet: 
+🔗 Linked Wallet : 
 
 <i>{kwargs["address"]}</i>
 

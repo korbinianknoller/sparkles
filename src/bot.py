@@ -15,7 +15,9 @@ from aiogram.types import (
     BufferedInputFile,
     InlineKeyboardMarkup,
     InlineKeyboardButton,
-    CallbackQuery
+    CallbackQuery,
+    ReplyKeyboardMarkup,
+    KeyboardButton
 )
 from aiogram import F
 from aiogram.enums.chat_member_status import ChatMemberStatus
@@ -141,6 +143,7 @@ async def verify_captcha(message: Message):
         if captcha_data.data and captcha_data.data == int(message.text):
              db.Captcha.objects(user_id=message.chat.id).update(set__verified=True)
              await message.answer(layouts.welcome_message(message.from_user.first_name))
+             await message.answer("Please follow the instructions below:")
              await asyncio.sleep(1)
              await message.answer("<b>Submit your solana wallet address 👇👇👇 (use phantom or solflare) </b>")
         else:
@@ -350,6 +353,66 @@ And after Link your Solana address to get verified.
 
     except Exception as e:
         print(e)
+
+@dp.message(Command("balance"))
+async def get_balance(message: Message):
+    try:
+        if check_verification(message.chat.id) is UserType.NO_USER:
+            await message.answer("""
+<b>Please Verify You're Human First (Click the start Command or type '/start' to begin)</b>
+
+And after Link your Solana address to get verified.                                 
+""")
+            return
+        user = db.User.objects(from_user_id=message.from_user.id)
+        await bot_helpers.get_balance_helper(user, message)
+    except Exception as e:
+        print(e)
+
+@dp.message(Command("wallet"))
+async def get_wallet_address(message: Message):
+    try:
+        if check_verification(message.chat.id) is UserType.NO_USER:
+            await message.answer("""
+<b>Please Verify You're Human First (Click the start Command or type '/start' to begin)</b>
+
+And after Link your Solana address to get verified.                                 
+""")
+            return
+        user = db.User.objects(from_user_id=message.from_user.id)
+
+        user, *_ = user
+        await message.answer(f"""
+Your wallet address: <i>{user.solana_address} </i>
+""")
+    except Exception as e:
+        print(e)
+
+@dp.message(Command("withdraw_airdrop"))
+async def withdraw_wallet_airdrop(message: Message):
+    try:
+        if check_verification(message.chat.id) is UserType.NO_USER:
+            await message.answer("""
+<b>Please Verify You're Human First (Click the start Command or type '/start' to begin)</b>
+
+And after Link your Solana address to get verified.                                 
+""")
+            return
+        await message.answer("🏛️ Withdrawal is after launch")
+    except Exception as e:
+        print(e)
+
+# @dp.message(Command("options"))
+# async def get_wallet_airdrop(message: Message):
+#     try:
+
+#         await message.answer("Menu", reply_markup=ReplyKeyboardMarkup(keyboard=[
+#             [KeyboardButton(text="💰 Balance"), KeyboardButton(text="💳 Wallet")],
+#             [KeyboardButton(text="🏛️ Withdraw Airdrop"), KeyboardButton(text="🔗 Referral")]
+#         ]))
+#     except Exception as e:
+#         print(e)
+
 
     
 
