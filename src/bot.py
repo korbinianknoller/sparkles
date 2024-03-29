@@ -333,7 +333,7 @@ And after Link your Solana address to get verified.
             return
     await message.reply("Please provide the referral link below 👇")
 
-@dp.message(F.text.regexp(r"referral:\d+"))
+@dp.message(F.text.regexp(r"ref\d+"))
 async def handle_referral(message: Message, bot: Bot):
     try:
         if check_verification(message.chat.id) is UserType.NO_USER:
