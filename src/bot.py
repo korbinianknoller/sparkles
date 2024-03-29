@@ -331,7 +331,8 @@ async def referral_command(message: Message):
 And after Link your Solana address to get verified.                                
 """)
             return
-    await message.reply("Please provide the referral link below 👇")
+    user = db.User.objects(from_user_id=message.from_user.id)
+    await bot_helpers.get_referral_helper(user, message)
 
 @dp.message(F.text.regexp(r"ref\d+"))
 async def handle_referral(message: Message, bot: Bot):
