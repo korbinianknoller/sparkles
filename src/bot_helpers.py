@@ -9,6 +9,7 @@ from aiogram.types import (
     InlineKeyboardButton,
     CallbackQuery
 )
+from aiogram import Bot
 
 from callback_actions import CustomCallBacksActions
 
@@ -52,9 +53,39 @@ async def get_referral_helper(user: list[db.User], message: Message):
     try:
         user, *_ = user
         await message.answer(f"""
-Your referral link is:   <i>{user.referral}</i>
+Your referral link is:   <i>https://t.me/SparkzStoreBot?start={user.referral}</i>
 
 For address: <i>{user.solana_address}</i>
 """)
+    except Exception as e:
+        print(e)
+
+async def handle_ref(message: Message, bot: Bot, ref: str):
+    try:
+        ref_owner = db.User.objects(referral=ref)
+        user = db.User.objects(user_id=message.chat.id)
+
+        if len(ref_owner) < 1:
+            await message.answer("⚠️ Referal Code is not correct ⚠️")
+            return
+        
+        if ref_owner[0].user_id == user[0].user_id:
+            await message.answer("⚠️ Cannot use own referral link ⚠️")
+            return
+        
+        if ref_owner[0].ref_used is True:
+            await message.answer("⚠️ Referal Code already used ⚠️")
+            return
+        
+        if user[0].ref_self is True:
+            await message.answer("⚠️ Cannot supply referral code more than once ⚠️")
+            return
+        
+        ref_owner.update(ref_used=True, token_balance=ref_owner[0].token_balance + 75)
+        user.update(ref_self=True)
+
+        await message.answer("Referral Linking Sucessful 🎯")
+        await bot.send_message(chat_id=ref_owner[0].user_id, text="You have a new Referral bonus: 75 $SPARKZ")
+
     except Exception as e:
         print(e)

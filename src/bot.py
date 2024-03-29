@@ -5,7 +5,7 @@ import datetime
 from os import getenv
 from io import BytesIO
 import random
-from aiogram import Bot, Dispatcher, Router, types
+from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 from enum import Enum
@@ -24,7 +24,6 @@ import db
 import layouts
 from callback_actions import CustomCallBacksActions
 import bot_helpers
-import socket
 
 class UserType(Enum):
     NO_USER = 1
@@ -49,16 +48,6 @@ dp = Dispatcher()
 def generate_captcha():
     return random.randint(100000, 999999)
 
-def write_bytesio_to_file(filename: str, bytesio: BytesIO):
-    """
-    Write the contents of the given BytesIO to a file.
-    Creates the file or overwrites the file if it does
-    not exist yet. 
-    """
-    with open(filename, "wb") as outfile:
-        # Copy the BytesIO stream to the output file
-        outfile.write(bytesio.getbuffer().tobytes())
-
 # Store CAPTCHA data (chat_id, captcha_string) in a dictionary
 
 def check_verification(id: int) -> UserType:
@@ -70,7 +59,7 @@ def check_verification(id: int) -> UserType:
     return UserType.NOT_VERIFIED_USER
 
 @dp.message(CommandStart())
-async def command_start_handler(message: Message) -> None:
+async def command_start_handler(message: Message, bot: Bot) -> None:
     """
     This handler receives messages with `/start` command
     """
@@ -81,13 +70,16 @@ async def command_start_handler(message: Message) -> None:
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
 
     try:
-        print("get fonts")
+        if check_verification(message.chat.id) == UserType.VERIFIED_USER:
+            await message.answer("<b> ⚠️ Already Verified </b>")
+            await message.answer(layouts.welcome_message(message.from_user.first_name))
+            return
+        
         custom_fonts = ['fonts/alex.ttf', 'fonts/bodon.ttf']
-        print("fonts gotten")
         captcha = ImageCaptcha(fonts=custom_fonts, width=360, height=160)
         # Generate a CAPTCHA
         data = generate_captcha()
-        print(data)
+        print('captcha',data)
         capt = db.Captcha.objects(user_id=message.chat.id)
         if len(capt) < 1:
             capt = db.Captcha(user_id=message.chat.id, data=data, created_at=datetime.datetime.now())
@@ -96,19 +88,34 @@ async def command_start_handler(message: Message) -> None:
             capt.update(data=data)
 
         data = str(data)
-        print("write image to container")
         captcha_image = captcha.generate(data)
-        # captcha.write(data, 'out.png')
-
-        # write_bytesio_to_file("out.png", captcha_image)
-        print("image written")
-        # print(captcha_image)
+      
 
         image_file = BufferedInputFile(captcha_image.getbuffer().tobytes(), "out.png")
-
         print("image gotten")
         
         await message.answer_photo(photo=image_file, caption="Prove You're Human (Type in chat below 👇)")
+        user = db.User.objects(user_id=message.chat.id)
+
+        if len(user) > 0:
+            pass
+        else:
+            user = db.User(
+                user_id=message.chat.id, 
+                from_user_id=message.from_user.id,
+                created_at=datetime.datetime.now(),
+                referral="ref" + str(message.chat.id),
+                token_balance = 0
+                )
+            user.save()
+
+        ref = message.text.split("/start")[1]
+
+        print("text message:", ref)
+        
+        if ref is not None and len(ref) > 3:
+            await bot_helpers.handle_ref(message, bot, ref.strip())
+
     except Exception as e:
         print(e)
 
@@ -152,29 +159,16 @@ async def solana_verify(message: Message):
         
         await message.answer("<i> checking wallet address...</i>")
 
+        db.User.objects(user_id=message.chat.id).update(solana_address=message.text)
         user = db.User.objects(user_id=message.chat.id)
-
-        if len(user) > 0:
-            user, *_ = user
-        else:
-            user = db.User(
-                user_id=message.chat.id, 
-                solana_address=message.text, 
-                from_user_id=message.from_user.id,
-                created_at=datetime.datetime.now(),
-                referral="referral:" + str(message.chat.id),
-                token_balance = 0
-                )
-            user.save()
         await asyncio.sleep(1.5)
-        print("user", user)
         await message.answer(
-            layouts.address_verified(user.solana_address),
+            layouts.address_verified(user[0].solana_address),
             reply_markup= InlineKeyboardMarkup(
                      inline_keyboard=[
-                         [InlineKeyboardButton(text="Press 🪂Airdrop to begin the airdrop tasks.", callback_data=CustomCallBacksActions(func_name="solana_verify", action="airdrop").pack())],
-                         [InlineKeyboardButton(text="Press 👥Referral to get the unique referral link of the linked wallet.", callback_data=CustomCallBacksActions(func_name="solana_verify", action="referral").pack())],
-                         [InlineKeyboardButton(text="Press 💰Balance to see the accumulated balances of the linked wallet.", callback_data=CustomCallBacksActions(func_name="solana_verify", action="balance").pack())]
+                         [InlineKeyboardButton(text="Press 🪂 Airdrop to begin the airdrop tasks.", callback_data=CustomCallBacksActions(func_name="solana_verify", action="airdrop").pack())],
+                         [InlineKeyboardButton(text="Press 👥 Referral to get the unique referral link of the linked wallet.", callback_data=CustomCallBacksActions(func_name="solana_verify", action="referral").pack())],
+                         [InlineKeyboardButton(text="Press 💰 Balance to see the accumulated balances of the linked wallet.", callback_data=CustomCallBacksActions(func_name="solana_verify", action="balance").pack())]
                     ])
             )
     except Exception as e:
@@ -349,30 +343,8 @@ async def handle_referral(message: Message, bot: Bot):
 And after Link your Solana address to get verified.                                 
 """)
             return
-        ref_owner = db.User.objects(referral=message.text)
-        user = db.User.objects(user_id=message.chat.id)
-
-        if len(ref_owner) < 1:
-            await message.answer("⚠️ Referal Code is not correct ⚠️")
-            return
         
-        if ref_owner[0].user_id == user[0].user_id:
-            await message.answer("⚠️ Cannot use own referral link ⚠️")
-            return
-        
-        if ref_owner[0].ref_used is True:
-            await message.answer("⚠️ Referal Code already used ⚠️")
-            return
-        
-        if user[0].ref_self is True:
-            await message.answer("⚠️ Cannot supply referral code more than once ⚠️")
-            return
-        
-        ref_owner.update(ref_used=True, token_balance=ref_owner[0].token_balance + 75)
-        user.update(ref_self=True)
-
-        await message.answer("Referral Linking Sucessful 🎯")
-        await bot.send_message(chat_id=ref_owner[0].user_id, text="You have a new Referral bonus: 75 $SPARKZ")
+        await bot_helpers.handle_ref(message, bot, message.text)
 
 
     except Exception as e:
