@@ -302,8 +302,8 @@ async def validate_twitter_task(message: Message):
             return
 
         
-        await message.answer("Validating Data, Kindly wait..")
-
+        await message.answer("Validating Mission, Kindly wait..")
+        await asyncio.sleep(1,6)
         await bot_helpers.twitter_task_verify_helper(message.from_user.id, verified, message)
     except Exception as e:
         print(e)
@@ -316,15 +316,40 @@ async def admin_messages(message:Message, bot: Bot):
         if admin.status is not ChatMemberStatus.ADMINISTRATOR and admin.status is not ChatMemberStatus.CREATOR:
             return
         
+        
         data = message.text
         directives = data.replace("admin/", "")
+
+        task = db.Task.objects()
+
+        if len(task) > 0:
+            task.update(task=directives)
+        else:
+            task = db.Task(task=directives)
+            task.save()
+
 
         users = db.User.objects()
 
         for u in users:
-            await bot.send_message(u.user_id, directives)
+            await bot.send_message(u.user_id, directives, reply_markup=InlineKeyboardMarkup(
+                inline_keyboard=[
+                    [InlineKeyboardButton(text="✅ VERIFY MISSION", callback_data=CustomCallBacksActions(func_name="admin_messages", action="verify_mission").pack())]
+                ]
+            ))
+        users.update(verify_twitter_task=False)
     except Exception as e:
         print(e)
+
+@dp.callback_query(CustomCallBacksActions.filter((F.func_name == "admin_messages") & (F.action == "verify_mission")))
+async def verify_admin_task(callback_query: CallbackQuery, bot: Bot):
+    try:
+        await callback_query.message.answer("verifying mission...")
+        await asyncio.sleep(random.randint(1, 6))
+        await callback_query.message.answer(layouts.share_twitter_link())
+    except Exception as e:
+        print(e)
+
 
 @dp.message(Command("referral"))
 async def referral_command(message: Message):

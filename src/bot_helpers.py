@@ -44,7 +44,7 @@ async def twitter_task_verify_helper(id: int, verified: bool, message: Message):
             return
             
         user.update(verify_twitter_task=True, token_balance=user[0].token_balance + 1000)
-
+        await message.answer("📝 Task submitted, and your point is added. Every mission will be  reverified before claim after launch")
         await get_balance_helper(user, message)
     except Exception as e:
         print(e)

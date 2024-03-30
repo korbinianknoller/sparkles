@@ -37,7 +37,7 @@ Read carefully and perform these Twitter tasks to be able to complete airdrop.
 
 def share_twitter_link():
     return """
-✍️After posting the reply, tap on share, copy the link to your comment and send here for verification. (share link in message box below 👇)
+✍️ After posting the reply, tap on share, copy the link to your comment and send here for verification. (share link in message box below 👇)
 """
 
 def not_done_twitter_task():

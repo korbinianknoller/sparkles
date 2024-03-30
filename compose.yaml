@@ -13,10 +13,6 @@ services:
       context: .
     ports:
       - 8043:8043
-    volumes:
-      - type: bind
-        source: ./
-        target: /app
     env_file:
       - .env
 # The commented out section below is an example of how to define a PostgreSQL

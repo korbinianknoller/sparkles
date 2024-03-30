@@ -25,3 +25,6 @@ class User(Document):
     verify_twitter_task = BooleanField(default=False)
     created_at = DateTimeField()
     updated_at = DateTimeField(default=datetime.datetime.now())
+
+class Task(Document):
+    task=StringField()
