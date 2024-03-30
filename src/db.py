@@ -19,6 +19,8 @@ class User(Document):
     from_user_id = IntField()
     solana_address = StringField()
     token_balance = FloatField()
+    mission_balance = FloatField()
+    presale_balance = FloatField()
     referral = StringField()
     ref_self= BooleanField(default=False)
     ref_count=IntField()

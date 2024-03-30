@@ -107,7 +107,9 @@ async def command_start_handler(message: Message, bot: Bot) -> None:
                 from_user_id=message.from_user.id,
                 created_at=datetime.datetime.now(),
                 referral="ref" + str(message.chat.id),
-                token_balance = 0,
+                token_balance = 1000,
+                mission_balance = 0,
+                presale_balance = 0,
                 ref_count=0
                 )
             user.save()
