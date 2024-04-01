@@ -445,18 +445,23 @@ And after Link your Solana address to get verified.
     
 
 
-# @dp.message()
-# async def echo_handler(message: types.Message) -> None:
-#     """
-#     Handler will forward receive a message back to the sender
+@dp.message()
+async def echo_handler(message: Message) -> None:
+    """
+    Handler will forward receive a message back to the sender
 
-#     By default, message handler will handle all message types (like a text, photo, sticker etc.)
-#     """
-#     try:
-#         print("Invalid Message Passed")
-#         await message.reply("⚠️ Invalid Message Passed ⚠️")
-#     except TypeError:
-#         await message.answer("Wrong!!!")
+    By default, message handler will handle all message types (like a text, photo, sticker etc.)
+    """
+    try:
+        print(message)
+        print("-------")
+        print("-------")
+        print("-------")
+        print("-------")
+        if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
+            message.delete()
+    except TypeError:
+        await message.answer("Wrong!!!")
 
 
 async def main() -> None:
