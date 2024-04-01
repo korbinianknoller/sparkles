@@ -446,7 +446,7 @@ And after Link your Solana address to get verified.
 
 
 @dp.message()
-async def echo_handler(message: Message) -> None:
+async def echo_handler(message: Message, bot: Bot) -> None:
     """
     Handler will forward receive a message back to the sender
 
@@ -456,7 +456,7 @@ async def echo_handler(message: Message) -> None:
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
             print("delete service message")
-            message.delete()
+            bot.delete_message(sparkz_store_group_id, message.message_id)
     except Exception as e:
         print(e)
 
