@@ -457,8 +457,8 @@ async def echo_handler(message: Message) -> None:
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
             print("delete service message")
             message.delete()
-    except TypeError:
-        await message.answer("Wrong!!!")
+    except Exception as e:
+        print(e)
 
 
 async def main() -> None:
