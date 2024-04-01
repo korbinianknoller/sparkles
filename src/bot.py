@@ -456,7 +456,7 @@ async def echo_handler(message: Message, bot: Bot) -> None:
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
             print("delete service message")
-            bot.delete_message(sparkz_store_group_id, message.message_id)
+            await message.delete()
     except Exception as e:
         print(e)
 
