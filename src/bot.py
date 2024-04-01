@@ -453,12 +453,9 @@ async def echo_handler(message: Message) -> None:
     By default, message handler will handle all message types (like a text, photo, sticker etc.)
     """
     try:
-        print(message)
-        print("-------")
-        print("-------")
-        print("-------")
-        print("-------")
+
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
+            print("delete service message")
             message.delete()
     except TypeError:
         await message.answer("Wrong!!!")
