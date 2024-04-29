@@ -40,7 +40,7 @@ print("ready to move")
 
 TOKEN = getenv("BOT_TOKEN")
 
-sparkz_store_channel_id = "@sparkzstore"
+sparkz_store_channel_id = "@sparkzmarketplace_channel"
 
 sparkz_store_group_id = "@sparkzmarketplace"
 
