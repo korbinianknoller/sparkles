@@ -42,7 +42,7 @@ TOKEN = getenv("BOT_TOKEN")
 
 sparkz_store_channel_id = "@sparkzstore"
 
-sparkz_store_group_id = "@sparkz_store"
+sparkz_store_group_id = "@sparkzmarketplace"
 
 # All handlers should be attached to the Router (or Dispatcher)
 dp = Dispatcher()
