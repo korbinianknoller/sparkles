@@ -15,9 +15,9 @@ Use '/referral' to get referral link
 
 def airdrop_message():
     return """
-Join our <a href="https://t.me/sparkzstore">official channel</a>
+Join our <a href="https://t.me/sparkzmarketplace_channel">official channel</a>
 
-Join group our <a href="https://t.me/sparkz_store">Official Group</a>
+Join group our <a href="https://t.me/sparkzmarketplace">Official Group</a>
 
 Click on ✅ DONE to verify
 """

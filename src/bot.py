@@ -227,7 +227,7 @@ async def done_callback_airdrop_done(callback_query: CallbackQuery, bot: Bot):
         if channel_member.status is ChatMemberStatus.LEFT:
             await callback_query.message.answer("⚠️ Challenge not completed ⚠️")
             await callback_query.message.reply(""" 
-Join our <a href='https://t.me/sparkzstore'>Official Channel</a> 
+Join our <a href='https://t.me/sparkzmarketplace_channel'>Official Channel</a> 
                                             
 Click on ✅ DONE to verify
                                             """,
@@ -241,7 +241,7 @@ Click on ✅ DONE to verify
         elif group_member.status == ChatMemberStatus.LEFT:
             await callback_query.message.answer("⚠️ Challenge not done ⚠️")
             await callback_query.message.reply(""" 
-Join group our <a href="https://t.me/sparkz_store">Official Group</a> \
+Join group our <a href="https://t.me/sparkzmarketplace">Official Group</a> \
 
 Click on ✅ DONE to verify""",
                     reply_markup=InlineKeyboardMarkup(
