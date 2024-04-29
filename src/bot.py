@@ -397,6 +397,21 @@ And after Link your Solana address to get verified.
     except Exception as e:
         print(e)
 
+
+@dp.message(Command("group"))
+async def get_balance(message: Message):
+    try:
+        await message.answer('Join our <a href="https://t.me/sparkzmarketplace">Official Group</a>')
+    except Exception as e:
+        print(e)
+
+@dp.message(Command("channel"))
+async def get_balance(message: Message):
+    try:
+        await message.answer('Join our <a href="https://t.me/sparkzmarketplace_channel">official channel</a>')
+    except Exception as e:
+        print(e)
+
 @dp.message(Command("wallet"))
 async def get_wallet_address(message: Message):
     try:
