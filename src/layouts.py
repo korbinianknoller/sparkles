@@ -26,6 +26,8 @@ def air_drop_task(address: str):
     return f"""
 Read carefully and perform these Twitter tasks to be able to complete airdrop.
 
+⚠️ If you don't complete this task, you won't be able to claim your airdrop at TGE. To avoid disqualification, you have to complete this task ⚠️
+
 🐦 Follow our Twitter Page <a href="https://x.com/SparkzStore?t=v0qDofejco5SuRpoxG9BeQ&s=09">@sparkzstore</a> click the 🔔 icon and turn on notifications for our posts on X.
 
 ♻️ Like and Retweet the pinned tweet, copy the solana wallet 👛 below and submit it to the pinned tweet as a reply.
@@ -42,9 +44,9 @@ def share_twitter_link():
 
 def not_done_twitter_task():
     return """
-This task is not completed, kindly complete tasks. 
-
-If completed, click on ✅DONE
+⚠️All missions and links submitted will be verified before airdrop claim.
+ 
+If completed, click  ✅️DONE
 """
 
 def sparkz_balance(**kwargs):
