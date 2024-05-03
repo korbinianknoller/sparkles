@@ -292,8 +292,14 @@ async def callback_validate_twitter_task(callback_query: CallbackQuery, bot: Bot
 
 
 @dp.message(F.text.regexp("^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"))
-async def validate_twitter_task(message: Message):
+async def validate_twitter_task(message: Message, bot: Bot):
     try:
+        admin = await bot.get_chat_member(chat_id=sparkz_store_channel_id, user_id=message.from_user.id)
+
+        if message.chat.type is 'channel' and admin.status is not ChatMemberStatus.ADMINISTRATOR:
+            await bot.delete_message(chat_id=sparkz_store_channel_id, message_id=message.message_id)
+            return
+        
         verified = False
         if check_verification(message.chat.id) is UserType.NO_USER:
             await message.answer("<b>Please Verify You're Human First (Click the start Command or type '/start' to begin)</b>")
