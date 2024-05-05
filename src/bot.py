@@ -497,13 +497,13 @@ async def echo_handler(message: Message, bot: Bot) -> None:
     """
     try:
         words = ['scam', 'sc@m', 'rugs', 'scams', 'sc@ms', 'rug', 'rugged', 'scammers', 'scammer', 'sc@mmers']
-
+        print(message)
         for w in words:
             if message.text.lower().__contains__(w):
                 await message.delete()
-                await message.answer('⚠️ Please do not use those words here ⚠️')
+                await message.answer(f'@{message.chat.username} Please do not use those words here ⚠️')
 
-        bot.set_my_commands
+
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
             print("delete service message")
             await message.delete()
