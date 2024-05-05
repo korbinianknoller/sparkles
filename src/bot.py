@@ -16,9 +16,12 @@ from aiogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton,
     CallbackQuery,
+    BotCommand,
+    BotCommandScopeAllPrivateChats,
     ReplyKeyboardMarkup,
     KeyboardButton
 )
+from aiogram.enums.bot_command_scope_type import BotCommandScopeType
 from aiogram import F
 from aiogram.enums.chat_member_status import ChatMemberStatus
 from captcha.image import ImageCaptcha
@@ -500,7 +503,7 @@ async def echo_handler(message: Message, bot: Bot) -> None:
                 await message.delete()
                 await message.answer('⚠️ Please do not use those words here ⚠️')
 
-
+        bot.set_my_commands
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
             print("delete service message")
             await message.delete()
@@ -508,10 +511,28 @@ async def echo_handler(message: Message, bot: Bot) -> None:
         print(e)
 
 
+async def set_bot_commands(bot: Bot):
+    commands = [
+        BotCommand(command="start", description="Start your interactions"),
+        BotCommand(command="referral", description="Get referral link"),
+        BotCommand(command="balance", description="Get total balance"),
+        BotCommand(command="wallet", description="Get wallet account"),
+        BotCommand(command="withdraw_airdrop", description="official group link"),
+        BotCommand(command="group", description="official group link"),
+        BotCommand(command="channel", description="Official channel link"),
+
+    ]
+    return await bot.set_my_commands(commands=commands, scope=BotCommandScopeAllPrivateChats(type=BotCommandScopeType.ALL_PRIVATE_CHATS))
+
+
+
 async def main() -> None:
     # Initialize Bot instance with a default parse mode which will be passed to all API calls
     bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
+
+    await set_bot_commands(bot=bot)
     # And the run events dispatching
+    # dp.startup.register()
     await dp.start_polling(bot)
 
 
