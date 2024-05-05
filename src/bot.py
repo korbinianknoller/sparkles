@@ -501,7 +501,7 @@ async def echo_handler(message: Message, bot: Bot) -> None:
         for w in words:
             if message.text.lower().__contains__(w):
                 await message.delete()
-                await message.answer(f'@{message.chat.username} Please do not use those words here ⚠️')
+                await message.answer(f'@{message.from_user.username} Please do not use those words here ⚠️')
 
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
