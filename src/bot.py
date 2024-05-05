@@ -50,6 +50,9 @@ dp = Dispatcher()
 def generate_captcha():
     return random.randint(100000, 999999)
 
+def check_group_type(message: Message):
+    return message.chat.type in ('supergroup', 'channel', 'group')
+
 # Store CAPTCHA data (chat_id, captcha_string) in a dictionary
 
 def check_verification(id: int) -> UserType:
@@ -70,7 +73,8 @@ async def command_start_handler(message: Message, bot: Bot) -> None:
     # and the target chat will be passed to :ref:`aiogram.methods.send_message.SendMessage`
     # method automatically or call API method directly via
     # Bot instance: `bot.send_message(chat_id=message.chat.id, ...)`
-
+    if check_group_type(message):
+        return
     try:
         if check_verification(message.chat.id) == UserType.VERIFIED_USER:
             await message.answer("<b> ⚠️ Already Verified </b>")
@@ -363,6 +367,9 @@ async def verify_admin_task(callback_query: CallbackQuery, bot: Bot):
 
 @dp.message(Command("referral"))
 async def referral_command(message: Message):
+    if check_group_type(message):
+        return
+
     if check_verification(message.chat.id) is UserType.NO_USER:
             await message.answer("""
 <b>Please Verify You're Human First (Click the start Command or type '/start' to begin)</b>
@@ -392,6 +399,8 @@ And after Link your Solana address to get verified.
 
 @dp.message(Command("balance"))
 async def get_balance(message: Message):
+    if check_group_type(message):
+        return
     try:
         if check_verification(message.chat.id) is UserType.NO_USER:
             await message.answer("""
@@ -408,6 +417,8 @@ And after Link your Solana address to get verified.
 
 @dp.message(Command("group"))
 async def get_balance(message: Message):
+    if check_group_type(message):
+        return
     try:
         await message.answer('Join our <a href="https://t.me/sparkzmarketplace">Official Group</a>')
     except Exception as e:
@@ -415,6 +426,8 @@ async def get_balance(message: Message):
 
 @dp.message(Command("channel"))
 async def get_balance(message: Message):
+    if check_group_type(message):
+        return
     try:
         await message.answer('Join our <a href="https://t.me/sparkzmarketplace_channel">official channel</a>')
     except Exception as e:
@@ -422,6 +435,8 @@ async def get_balance(message: Message):
 
 @dp.message(Command("wallet"))
 async def get_wallet_address(message: Message):
+    if check_group_type(message):
+        return
     try:
         if check_verification(message.chat.id) is UserType.NO_USER:
             await message.answer("""
@@ -441,6 +456,8 @@ Your wallet address: <i>{user.solana_address} </i>
 
 @dp.message(Command("withdraw_airdrop"))
 async def withdraw_wallet_airdrop(message: Message):
+    if check_group_type(message):
+        return
     try:
         if check_verification(message.chat.id) is UserType.NO_USER:
             await message.answer("""
