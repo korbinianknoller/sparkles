@@ -320,10 +320,12 @@ async def validate_twitter_task(message: Message, bot: Bot):
 @dp.message(F.text.startswith('admin/'))
 async def admin_messages(message:Message, bot: Bot):
     try:
+        print(message.chat)
         admin = await bot.get_chat_member(chat_id=sparkz_store_channel_id, user_id=message.from_user.id)
 
         if admin.status is not ChatMemberStatus.ADMINISTRATOR and admin.status is not ChatMemberStatus.CREATOR:
             return
+        
         
         
         data = message.text
@@ -336,7 +338,6 @@ async def admin_messages(message:Message, bot: Bot):
         else:
             task = db.Task(task=directives)
             task.save()
-
 
         users = db.User.objects()
 
@@ -475,6 +476,11 @@ async def echo_handler(message: Message, bot: Bot) -> None:
     By default, message handler will handle all message types (like a text, photo, sticker etc.)
     """
     try:
+
+        if message.text.lower() in ('scam', 'sc@m', 'rugs', 'rugged', 'scammers', 'scammer', 'sc@mmers'):
+            await message.delete()
+            await message.answer('⚠️ Please do not use those words here ⚠️')
+
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
             print("delete service message")
