@@ -21,6 +21,7 @@ from aiogram.types import (
     ReplyKeyboardMarkup,
     KeyboardButton
 )
+import re
 from aiogram.enums.bot_command_scope_type import BotCommandScopeType
 from aiogram import F
 from aiogram.enums.chat_member_status import ChatMemberStatus
@@ -502,12 +503,19 @@ async def echo_handler(message: Message, bot: Bot) -> None:
     By default, message handler will handle all message types (like a text, photo, sticker etc.)
     """
     try:
+        admin = await bot.get_chat_member(chat_id=sparkz_store_channel_id, user_id=message.from_user.id)
+
         words = ['scam', 'sc@m', 'rugs', 'scams', 'sc@ms', 'rug', 'rugged', 'scammers', 'scammer', 'sc@mmers']
         print(message)
         for w in words:
             if message.text.lower().__contains__(w):
                 await message.delete()
                 await message.answer(f'@{message.from_user.username} Please do not use those words here ⚠️')
+
+        regexp = re.compile(r'^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$')
+
+        if regexp.search(message.text) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
+            await message.delete()
 
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
