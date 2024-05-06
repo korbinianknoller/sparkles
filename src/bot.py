@@ -513,7 +513,7 @@ async def echo_handler(message: Message, bot: Bot) -> None:
                 await message.answer(f'@{message.from_user.username} Please do not use those words here ⚠️')
 
         
-        online = ['https', 'http:', 'www', '.com', '.io', '.org']
+        online = ['https:', 'http:', 'www/', '.com', '.io', '.org']
         for o in online:
             if message.text.lower().__contains__(o) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
                 await message.delete()
