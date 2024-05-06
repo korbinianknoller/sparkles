@@ -303,9 +303,15 @@ async def validate_twitter_task(message: Message, bot: Bot):
     try:
         admin = await bot.get_chat_member(chat_id=sparkz_store_channel_id, user_id=message.from_user.id)
 
+        # print(message)
+        print('admin uuuuuuu',admin)
 
-        if message.chat.type in ('supergroup', 'channel', 'group') and admin.status is not ChatMemberStatus.ADMINISTRATOR:
+
+        if message.chat.type in ('supergroup', 'channel', 'group') and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
             await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
+            return
+        
+        if check_group_type(message):
             return
         
         verified = False
