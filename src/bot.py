@@ -512,10 +512,11 @@ async def echo_handler(message: Message, bot: Bot) -> None:
                 await message.delete()
                 await message.answer(f'@{message.from_user.username} Please do not use those words here ⚠️')
 
-        regexp = re.compile(r'^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$')
-
-        if regexp.search(message.text) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
-            await message.delete()
+        
+        online = ['https', 'http:', 'www', '.com']
+        for o in online:
+            if message.text.lower().__contains__(o) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
+                await message.delete()
 
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
