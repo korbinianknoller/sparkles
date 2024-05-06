@@ -503,27 +503,30 @@ async def echo_handler(message: Message, bot: Bot) -> None:
     By default, message handler will handle all message types (like a text, photo, sticker etc.)
     """
     try:
+        if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
+            print("delete service message")
+            await message.delete()
+
+
         admin = await bot.get_chat_member(chat_id=sparkz_store_channel_id, user_id=message.from_user.id)
 
         words = ['scam', 'sc@m', 'rugs', 'scams', 'sc@ms', 'rug', 'rugged', 'scammers', 'scammer', 'sc@mmers']
         print(message)
         for w in words:
-            if message.text != '' and message.text.lower().__contains__(w):
+            if message.text.lower().__contains__(w):
                 await message.delete()
                 await message.answer(f'@{message.from_user.username} Please do not use those words here ⚠️')
 
         
         online = ['https:', 'http:', 'www.', '.com', '.io', '.org']
         for o in online:
-            if message.text != '' and message.text.lower().__contains__(o) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
+            if message.text.lower().__contains__(o) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
                 await message.delete()
 
         print(message)
 
 
-        if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
-            print("delete service message")
-            await message.delete()
+        
     except Exception as e:
         print(e)
 
