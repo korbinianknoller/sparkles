@@ -508,15 +508,17 @@ async def echo_handler(message: Message, bot: Bot) -> None:
         words = ['scam', 'sc@m', 'rugs', 'scams', 'sc@ms', 'rug', 'rugged', 'scammers', 'scammer', 'sc@mmers']
         print(message)
         for w in words:
-            if message.text.lower().__contains__(w):
+            if message.text is not '' and message.text.lower().__contains__(w):
                 await message.delete()
                 await message.answer(f'@{message.from_user.username} Please do not use those words here ⚠️')
 
         
-        online = ['https:', 'http:', 'www/', '.com', '.io', '.org']
+        online = ['https:', 'http:', 'www.', '.com', '.io', '.org']
         for o in online:
-            if message.text.lower().__contains__(o) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
+            if message.text is not '' and message.text.lower().__contains__(o) and not (admin.status is ChatMemberStatus.ADMINISTRATOR or admin.status is ChatMemberStatus.CREATOR):
                 await message.delete()
+
+        print(message)
 
 
         if getattr(message, 'left_chat_participant', None) is not None and message.left_chat_member is not None:
