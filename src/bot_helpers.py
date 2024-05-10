@@ -43,7 +43,7 @@ async def twitter_task_verify_helper(id: int, verified: bool, message: Message):
             await message.answer("Twitter task already verified")
             return
             
-        user.update(verify_twitter_task=True, mission_balance=user[0].mission_balance + 100)
+        user.update(verify_twitter_task=True, mission_balance=user[0].mission_balance + 1000)
         await message.answer("📝 Task submitted, and your point is added. Every mission will be reverified before claim after launch")
         await get_balance_helper(user, message)
     except Exception as e:
@@ -77,7 +77,7 @@ async def handle_ref(message: Message, bot: Bot, ref: str):
             await message.answer("⚠️ Cannot use referral code more than once ⚠️")
             return
         
-        ref_owner.update(ref_count=ref_owner[0].ref_count + 1, token_balance=ref_owner[0].token_balance + 75)
+        ref_owner.update(ref_count=ref_owner[0].ref_count + 1, token_balance=ref_owner[0].token_balance + 1000)
         user.update(ref_self=True)
 
         await message.answer("Referral Linking Sucessful 🎯")
