@@ -81,7 +81,7 @@ async def handle_ref(message: Message, bot: Bot, ref: str):
         user.update(ref_self=True)
 
         await message.answer("Referral Linking Sucessful 🎯")
-        await bot.send_message(chat_id=ref_owner[0].user_id, text="You have a new Referral bonus: 75 $SPARKZ")
+        await bot.send_message(chat_id=ref_owner[0].user_id, text="You have a new Referral bonus: 1000 $SPARKZ")
 
     except Exception as e:
         print(e)
