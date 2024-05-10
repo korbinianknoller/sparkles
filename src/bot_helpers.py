@@ -77,11 +77,11 @@ async def handle_ref(message: Message, bot: Bot, ref: str):
             await message.answer("⚠️ Cannot use referral code more than once ⚠️")
             return
         
-        ref_owner.update(ref_count=ref_owner[0].ref_count + 1, token_balance=ref_owner[0].token_balance + 1000)
+        ref_owner.update(ref_count=ref_owner[0].ref_count + 1, token_balance=ref_owner[0].token_balance + 300)
         user.update(ref_self=True)
 
         await message.answer("Referral Linking Sucessful 🎯")
-        await bot.send_message(chat_id=ref_owner[0].user_id, text="You have a new Referral bonus: 1000 $SPARKZ")
+        await bot.send_message(chat_id=ref_owner[0].user_id, text="You have a new Referral bonus: 300 $SPARKZ")
 
     except Exception as e:
         print(e)
